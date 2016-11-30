@@ -6,7 +6,9 @@ use yii\bootstrap\Tabs;
 
 $this->params['breadcrumbs'][] = ['label' => 'Роли', 'url' => ['index']];
 $this->title = 'Роль ' . ($this->params['breadcrumbs'][] = $model->name);
+
 ?>
+
 <div class="role-view">
 
     <h1><?php echo Html::encode($this->title); ?></h1>

@@ -12,6 +12,8 @@ class Module extends \yii\base\Module
     public $paginationPageSize = 10;
     public $mailerViewPath = '@rbacUserManager/mail';
 
+	public $passwordMinLength = 6;
+
 	public $userAdditionalForm = NULL;
 	public $userAdditionalView = NULL;
 	public $userAdditionalIndex = NULL;
@@ -51,6 +53,10 @@ class Module extends \yii\base\Module
 
 			$app->user->loginUrl = [$this->id . '/auth/login'];
         }
+
+		if($app instanceof yii\console\Application){
+			$app->controllerNamespace = 'rbacUserManager\commands';
+		}
     }
 
 }

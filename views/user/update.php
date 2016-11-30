@@ -8,7 +8,9 @@ $this->title = 'Редактировать пользователя ' . $model->
 $this->params['breadcrumbs'][] = ['label' => 'Пользователи', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->username, 'url' => ['view', 'id' => $model->id, ]];
 $this->params['breadcrumbs'][] = 'Редактировать';
+
 ?>
+
 <div class="user-update">
 
     <h1><?php echo Html::encode($this->title); ?></h1>

@@ -5,7 +5,9 @@ use yii\grid\GridView;
 
 $this->title = 'Разрешения';
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
+
 <div class="permission-index">
 
     <h1><?php echo Html::encode($this->title); ?></h1>

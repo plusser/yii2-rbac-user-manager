@@ -84,7 +84,7 @@ class RoleController extends Controller
     protected function findModel($id)
     {
         if(!is_object($model = Yii::$app->authManager->getRole($id))){
-			throw new NotFoundHttpException('Роли ' . $id . ' не существует.');
+			throw new NotFoundHttpException('Роль ' . $id . ' не существует.');
 		}
 
 		return new PermissionRoleForm($model);

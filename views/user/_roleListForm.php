@@ -14,4 +14,3 @@ $F = function($item, $userRoleList){
 	</li>
 <?php } ?>
 </ul>
-

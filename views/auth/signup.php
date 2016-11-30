@@ -6,7 +6,9 @@ use yii\bootstrap\ActiveForm;
 $this->title = 'Регистрация нового пользователя';
 $this->params['breadcrumbs'][] = ['label' => 'Пользователи', 'url' => ['user/index']];
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
+
 <div class="auth-signup">
     <h1><?php echo Html::encode($this->title); ?></h1>
 

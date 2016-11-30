@@ -82,7 +82,7 @@ class UserController extends Controller
     protected function findModel($id)
     {
         if(is_null($model = User::findOne($id))){
-			throw new NotFoundHttpException('Пользователя с ID ' . $id . ' не существует.');
+			throw new NotFoundHttpException('Пользователь с ID ' . $id . ' не существует.');
         }
 
 		return $model;

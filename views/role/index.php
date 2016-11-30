@@ -5,7 +5,9 @@ use yii\grid\GridView;
 
 $this->title = 'Роли';
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
+
 <div class="role-index">
 
     <h1><?php echo Html::encode($this->title); ?></h1>

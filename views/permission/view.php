@@ -5,7 +5,9 @@ use yii\widgets\DetailView;
 
 $this->params['breadcrumbs'][] = ['label' => 'Разрешения', 'url' => ['index']];
 $this->title = 'Разрешение ' . ($this->params['breadcrumbs'][] = $model->name);
+
 ?>
+
 <div class="permission-view">
 
     <h1><?php echo Html::encode($this->title); ?></h1>

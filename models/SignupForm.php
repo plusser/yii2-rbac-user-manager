@@ -2,6 +2,7 @@
 
 namespace rbacUserManager\models;
 
+use Yii;
 use yii\base\Model;
 
 class SignupForm extends Model
@@ -25,7 +26,7 @@ class SignupForm extends Model
             ['email', 'unique', 'targetClass' => '\rbacUserManager\models\User', 'message' => 'Пользователь с такой электронной почтой уже существует.', ],
 
             ['password', 'required', ],
-            ['password', 'string', 'min' => 6, ],
+            ['password', 'string', 'min' => is_object($module = Yii::$app->getModule('rbacUserManager')) ? $module->passwordMinLength : 6, ],
         ];
     }
 
@@ -40,7 +41,7 @@ class SignupForm extends Model
 
     public function signup()
     {
-		$result = null;
+		$result = NULL;
 
         if($this->validate()){
 			$user = new User();
@@ -48,7 +49,7 @@ class SignupForm extends Model
 			$user->email = $this->email;
 			$user->setPassword($this->password);
 			$user->generateAuthKey();
-			$result = $user->save() ? $user : null;
+			$result = $user->save() ? $user : NULL;
         }
 
         return $result;

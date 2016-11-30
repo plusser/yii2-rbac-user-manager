@@ -58,6 +58,7 @@ $attributes[] = [
 ];
 
 ?>
+
 <div class="user-view">
 
     <h1><?php echo Html::encode($this->title); ?></h1>

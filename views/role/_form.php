@@ -6,6 +6,7 @@ use yii\bootstrap\Collapse;
 use yii\bootstrap\Tabs;
 
 ?>
+
 	<div class="role-form">
 
 		<?php $form = ActiveForm::begin(); ?>

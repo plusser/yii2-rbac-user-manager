@@ -84,7 +84,7 @@ class User extends commonUser
 	{
 		parent::afterSave($insert, $changedAttributes);
 
-		if(!$this->hasErrors() AND Yii::$app->user->can('userRoleUpdate')){
+		if(!$this->hasErrors() AND ((Yii::$app instanceof yii\console\Application) OR Yii::$app->user->can('userRoleUpdate'))){
 
             Yii::$app->authManager->revokeAll($this->id);
 
@@ -92,6 +92,15 @@ class User extends commonUser
                 Yii::$app->authManager->assign(Yii::$app->authManager->getRole($item->roleName), $this->id);
 			}
 		}
+	}
+
+	public function beforeDelete()
+	{
+		if($result = parent::beforeDelete()){
+			Yii::$app->authManager->revokeAll($this->id);
+		}
+
+		return $result;
 	}
 
 }

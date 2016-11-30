@@ -5,13 +5,18 @@ use yii\grid\GridView;
 
 $this->title = 'Правила';
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
+
 <div class="rule-index">
 
     <h1><?php echo Html::encode($this->title); ?></h1>
 
     <?php echo GridView::widget([
         'dataProvider' => $dataProvider,
+		'options' => [
+			'style' => 'white-space: normal !important; word-break: break-all !important;',
+		],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             'name',
