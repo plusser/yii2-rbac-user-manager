@@ -55,7 +55,7 @@ class Module extends \yii\base\Module
         }
 
 		if($app instanceof yii\console\Application){
-			$app->controllerNamespace = 'rbacUserManager\commands';
+			$app->controllerMap['rbac-user-manager'] = 'rbacUserManager\commands\RbacUserManagerController';
 		}
     }
 
