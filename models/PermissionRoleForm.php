@@ -8,14 +8,14 @@ use yii\base\Model;
 class PermissionRoleForm extends Model
 {
 
-	protected $model;
-	protected $originalName;
-	protected $_children = [];
+    protected $model;
+    protected $originalName;
+    protected $_children = [];
 
     public function __construct($model, $config = [])
     {
         $this->model = $model;
-		$this->originalName = $this->model->name;
+        $this->originalName = $this->model->name;
 
         parent::__construct($config);
     }
@@ -23,22 +23,22 @@ class PermissionRoleForm extends Model
     public function rules()
     {
         return [
-			[['name', 'ruleName', ], 'trim'],
+            [['name', 'ruleName', ], 'trim'],
             ['name', 'required'],
             [['name', 'ruleName', ], 'string', 'min' => 2, 'max' => 255, ],
-			[['description', 'children', ], 'safe'],
+            [['description', 'children', ], 'safe'],
         ];
     }
 
-	public function attributeLabels()
+    public function attributeLabels()
     {
         return [
-			'name' => 'Название',
-			'description' => 'Описание',
+            'name' => 'Название',
+            'description' => 'Описание',
             'ruleName' => 'Правило',
-			'createdAt' => 'Дата создания',
+            'createdAt' => 'Дата создания',
             'updatedAt' => 'Дата изменения',
-			'children' => 'Включает в себя',
+            'children' => 'Включает в себя',
         ];
     }
 
@@ -47,110 +47,110 @@ class PermissionRoleForm extends Model
         return get_class($this->model);
     }
 
-	public function getChildren()
-	{
-		return (empty($this->_children) AND !$this->hasErrors()) ? Yii::$app->authManager->getChildren($this->model->name) : $this->_children;
-	}
+    public function getChildren()
+    {
+        return (empty($this->_children) AND !$this->hasErrors()) ? Yii::$app->authManager->getChildren($this->model->name) : $this->_children;
+    }
 
-	public function setChildren($children)
-	{
-		if(!empty($children)){
-			$this->_children = [];
-			foreach((array) $children as $itemName => $type){
-				if(is_object($item = Yii::$app->authManager->{'get' . ($type == yii\rbac\Item::TYPE_ROLE ? 'Role' : 'Permission')}($itemName))){
-					$this->_children[$item->name] = $item;
-				}
-			}
-		}
+    public function setChildren($children)
+    {
+        if(!empty($children)){
+            $this->_children = [];
+            foreach((array) $children as $itemName => $type){
+                if(is_object($item = Yii::$app->authManager->{'get' . ($type == yii\rbac\Item::TYPE_ROLE ? 'Role' : 'Permission')}($itemName))){
+                    $this->_children[$item->name] = $item;
+                }
+            }
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function getName()
-	{
-		return $this->model->name;
-	}
+    public function getName()
+    {
+        return $this->model->name;
+    }
 
-	public function setName($name)
-	{
-		$this->model->name = $name;
+    public function setName($name)
+    {
+        $this->model->name = $name;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function getDescription()
-	{
-		return $this->model->hasProperty('description') ? $this->model->description : NULL;
-	}
+    public function getDescription()
+    {
+        return $this->model->hasProperty('description') ? $this->model->description : NULL;
+    }
 
-	public function setDescription($description)
-	{
+    public function setDescription($description)
+    {
         if($this->model->hasProperty('description')){
             $this->model->description = $description;
         }
 
-		return $this;
-	}
+        return $this;
+    }
 
     public function getRuleName()
-	{
-		return $this->model->ruleName;
-	}
+    {
+        return $this->model->ruleName;
+    }
 
-	public function setRuleName($ruleName)
-	{
-		$this->model->ruleName = empty($ruleName) ? NULL : $ruleName;
+    public function setRuleName($ruleName)
+    {
+        $this->model->ruleName = empty($ruleName) ? NULL : $ruleName;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function getCreatedAt()
-	{
-		return $this->model->createdAt;
-	}
+    public function getCreatedAt()
+    {
+        return $this->model->createdAt;
+    }
 
-	public function getUpdatedAt()
-	{
-		return $this->model->updatedAt;
-	}
+    public function getUpdatedAt()
+    {
+        return $this->model->updatedAt;
+    }
 
-	public function getIsNewRecord()
-	{
-		return empty($this->originalName);
-	}
+    public function getIsNewRecord()
+    {
+        return empty($this->originalName);
+    }
 
-	public function validate()
-	{
-		$result = true;
+    public function validate($attributeNames = NULL, $clearErrors = true)
+    {
+        $result = true;
 
-		if($this->isNewRecord OR $this->name != $this->originalName){
-			if(is_object(Yii::$app->authManager->getPermission($this->name)) OR is_object(Yii::$app->authManager->getRole($this->name))){
-				$this->addError('name', 'Разрешение или роль с таким названием уже существует.');
-				$result = false;
-			}
-		}
+        if($this->isNewRecord OR $this->name != $this->originalName){
+            if(is_object(Yii::$app->authManager->getPermission($this->name)) OR is_object(Yii::$app->authManager->getRole($this->name))){
+                $this->addError('name', 'Разрешение или роль с таким названием уже существует.');
+                $result = false;
+            }
+        }
 
-		return parent::validate(null, false) AND $result;
-	}
+        return parent::validate($attributeNames, false) AND $result;
+    }
 
-	public function save()
-	{
-		$result = false;
+    public function save()
+    {
+        $result = false;
 
-		if($this->validate()){
-			if($result = ($this->isNewRecord ? Yii::$app->authManager->add($this->model) : Yii::$app->authManager->update($this->originalName, $this->model))){
-				Yii::$app->authManager->removeChildren($this->model);
-				foreach($this->children as $item){
-					Yii::$app->authManager->addChild($this->model, $item);
-				}
-			}
-		}
+        if($this->validate()){
+            if($result = ($this->isNewRecord ? Yii::$app->authManager->add($this->model) : Yii::$app->authManager->update($this->originalName, $this->model))){
+                Yii::$app->authManager->removeChildren($this->model);
+                foreach($this->children as $item){
+                    Yii::$app->authManager->addChild($this->model, $item);
+                }
+            }
+        }
 
-		return $result;
-	}
+        return $result;
+    }
 
-	public function delete()
-	{
-		return Yii::$app->authManager->remove($this->model);
-	}
+    public function delete()
+    {
+        return Yii::$app->authManager->remove($this->model);
+    }
 }
