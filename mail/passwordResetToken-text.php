@@ -1,3 +1,8 @@
+<?php 
+
+use yii\helpers\Html;
+
+?>
 Здравствуйте, <?php echo Html::encode($user->username); ?>!
 
 Чтобы восстановить пароль пройдите по ссылке ниже:
