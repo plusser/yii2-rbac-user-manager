@@ -5,8 +5,10 @@ namespace rbacUserManager\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ArrayDataProvider;
+use yii\data\DataProviderInterface;
+use crud\interfaces\SearchModelInterface;
 
-class RuleSearch extends Model
+class RuleSearch extends Model implements SearchModelInterface
 {
 
     protected $model;
@@ -37,7 +39,7 @@ class RuleSearch extends Model
         ];
     }
 
-    public function search($params)
+    public function search(array $params): DataProviderInterface
     {
         $this->load($params);
 

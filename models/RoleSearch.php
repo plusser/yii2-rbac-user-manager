@@ -3,9 +3,10 @@
 namespace rbacUserManager\models;
 
 use Yii;
+use crud\interfaces\SearchModelInterface;
 use rbacUserManager\components\AuthItemSearchTrait;
 
-class RoleSearch extends RoleForm
+class RoleSearch extends RoleForm implements SearchModelInterface
 {
 
     use AuthItemSearchTrait;

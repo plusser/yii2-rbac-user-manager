@@ -1,11 +1,12 @@
-<?php 
+<?php
 
 namespace rbacUserManager\models;
 
 use Yii;
+use crud\interfaces\SearchModelInterface;
 use rbacUserManager\components\AuthItemSearchTrait;
 
-class PermissionSearch extends PermissionForm
+class PermissionSearch extends PermissionForm implements SearchModelInterface
 {
 
     use AuthItemSearchTrait;

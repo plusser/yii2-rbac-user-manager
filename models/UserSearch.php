@@ -1,11 +1,12 @@
-<?php 
+<?php
 
 namespace rbacUserManager\models;
 
-use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use yii\data\DataProviderInterface;
+use crud\interfaces\SearchModelInterface;
 
-class UserSearch extends User
+class UserSearch extends User implements SearchModelInterface
 {
 
     public function rules()
@@ -16,12 +17,7 @@ class UserSearch extends User
         ];
     }
 
-    public function scenarios()
-    {
-        return Model::scenarios();
-    }
-
-    public function search($params)
+    public function search(array $params): DataProviderInterface
     {
         $query = User::find();
         $dataProvider = new ActiveDataProvider([

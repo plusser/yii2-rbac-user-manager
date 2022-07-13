@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace rbacUserManager\models;
 
@@ -27,11 +27,11 @@ class LoginForm extends Model
         ];
     }
 
-	public function attributeLabels()
+    public function attributeLabels()
     {
         return [
             'username' => 'Логин',
-			'password' => 'Пароль',
+            'password' => 'Пароль',
             'rememberMe' => 'Запомнить на ' . Yii::$app->controller->module->rememberMeDaysCount . ' дней',
         ];
     }

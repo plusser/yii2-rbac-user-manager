@@ -4,6 +4,7 @@ namespace rbacUserManager\components;
 
 use Yii;
 use yii\data\ArrayDataProvider;
+use yii\data\DataProviderInterface;
 
 trait AuthItemSearchTrait
 {
@@ -27,7 +28,7 @@ trait AuthItemSearchTrait
         return $result;
     }
 
-    public function search($params)
+    public function search(array $params): DataProviderInterface
     {
         $this->load($params);
         $this->validate();

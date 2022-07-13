@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace rbacUserManager\models;
 
@@ -14,15 +14,15 @@ class User extends commonUser
 	public function attributeLabels()
     {
         return array_merge(parent::attributeLabels(), [
-            'id' => 'ID',
-            'username' => 'Логин',
-            'email' => 'Электронная почта',
-			'password' => 'Пароль',
-            'status' => 'Активен',
-            'created_at' => 'Дата создания',
-            'updated_at' => 'Дата изменения',
-            'roleList' => 'Роли',
-            'permissionList' => 'Разрешения',
+            'id'                => 'ID',
+            'username'          => 'Логин',
+            'email'             => 'Электронная почта',
+			'password'          => 'Пароль',
+            'status'            => 'Активен',
+            'created_at'        => 'Дата создания',
+            'updated_at'        => 'Дата изменения',
+            'roleList'          => 'Роли',
+            'permissionList'    => 'Разрешения',
         ]);
     }
 
