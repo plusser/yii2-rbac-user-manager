@@ -23,8 +23,8 @@ to the require section of your `composer.json` file.
 
 Simple configuration:
 
-1. Change your authManager class to yii\rbac\DbManager (REQUIRED) in web and console config,
-    and user identityClass (OPTIONAL but RECOMMENDED for most functionality, because rbacUserManager\models\User extends common\models\User) in web config only.
+1. Change your `authManager` class to `yii\rbac\DbManager` (`REQUIRED`) in web and console configs,
+    and user `identityClass` (`OPTIONAL` but `RECOMMENDED` for most functionality, because `rbacUserManager\models\User` extends `common\models\User`) in web config only.
 
 ```
 [
@@ -43,7 +43,7 @@ Simple configuration:
 ]
 ```
 
-2. Add rbacUserManager module to your web and console config.
+2. Add `rbacUserManager` module to your web and console configs.
 
 ```
 [
