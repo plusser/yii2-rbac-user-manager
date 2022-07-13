@@ -66,6 +66,6 @@ php yii migrate --migrationPath=@yii/rbac/migrations
 
 php yii rbac-user-manager/init
 
-yii rbac-user-manager/add-user-role -u your_username -r administrator
+php yii rbac-user-manager/add-user-role -u your_username -r administrator
 
 ```
