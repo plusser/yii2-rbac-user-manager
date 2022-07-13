@@ -2,7 +2,6 @@
 
 namespace rbacUserManager\components;
 
-use Yii;
 use yii\rbac\Rule;
  
 class UserProfileOwnerRule extends Rule

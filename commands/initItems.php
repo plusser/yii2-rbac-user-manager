@@ -5,7 +5,7 @@ use rbacUserManager\components\UserProfileOwnerRule;
 
 return [
 	'rules' => [
-		UserProfileOwnerRule::className(),
+		UserProfileOwnerRule::class,
 	],
 	'permissions' => [
 		[

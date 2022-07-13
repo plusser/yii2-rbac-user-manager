@@ -2,16 +2,15 @@
 
 namespace rbacUserManager\components;
 
-use Yii;
 use yii\helpers\Console;
-use yii\console\Controller;
+use yii\console\ExitCode;
 
 trait ConsoleCommandTrait
 {
 
 	protected function exitCode($error = FALSE)
 	{
-		return $error ? Controller::EXIT_CODE_ERROR : Controller::EXIT_CODE_NORMAL;
+		return $error ? ExitCode::UNSPECIFIED_ERROR : ExitCode::OK;
 	}
 
 	protected function checkTransferOptions($options)

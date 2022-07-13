@@ -6,7 +6,8 @@ use Yii;
 use yii\console\Controller;
 use yii\helpers\Console;
 use rbacUserManager\components\ConsoleCommandTrait;
-use rbacUserManager\models\PermissionRoleForm;
+use rbacUserManager\models\PermissionForm;
+use rbacUserManager\models\RoleForm;
 use rbacUserManager\models\SignupForm;
 use rbacUserManager\models\User;
 
@@ -54,7 +55,7 @@ class RbacUserManagerController extends Controller
 
             $this->stdout("\t" . $newRuleModel->name, Console::BOLD);
 
-            if(!is_object($ruleModel = Yii::$app->authManager->getRule($newRuleModel->name)) OR $this->force){
+            if(!is_object($ruleModel = Yii::$app->authManager->getRule($newRuleModel->name)) || $this->force){
                 if(!is_object($ruleModel)){
                     Yii::$app->authManager->add($newRuleModel);
                     $this->stdout("\t" . 'добавлено' . PHP_EOL, Console::FG_GREEN);
@@ -74,8 +75,8 @@ class RbacUserManagerController extends Controller
         foreach($initItems['permissions'] as $item){
             $this->stdout("\t" . $item['name'], Console::BOLD);
 
-            if(!is_object($permissionModel = Yii::$app->authManager->getPermission($item['name'])) OR $this->force){
-                $model = new PermissionRoleForm($permissionModel ? $permissionModel : Yii::$app->authManager->createPermission(null));
+            if(!is_object($permissionModel = Yii::$app->authManager->getPermission($item['name'])) || $this->force){
+                $model = new PermissionForm($permissionModel ? $permissionModel : Yii::$app->authManager->createPermission(null));
                 $model->setAttributes($item);
                 if($model->save()){
                     is_object($permissionModel) ? $this->stdout("\t" . 'обновлено' . PHP_EOL, Console::FG_YELLOW) : $this->stdout("\t" . 'добавлено' . PHP_EOL, Console::FG_GREEN);
@@ -92,8 +93,8 @@ class RbacUserManagerController extends Controller
         foreach($initItems['roles'] as $item){
             $this->stdout("\t" . $item['name'], Console::BOLD);
 
-            if(!is_object($roleModel = Yii::$app->authManager->getRole($item['name'])) OR $this->force){
-                $model = new PermissionRoleForm($roleModel ? $roleModel : Yii::$app->authManager->createRole(null));
+            if(!is_object($roleModel = Yii::$app->authManager->getRole($item['name'])) || $this->force){
+                $model = new RoleForm($roleModel ? $roleModel : Yii::$app->authManager->createRole(null));
                 $model->setAttributes($item);
                 if($model->save()){
                     is_object($roleModel) ? $this->stdout("\t" . 'обновлена' . PHP_EOL, Console::FG_YELLOW) : $this->stdout("\t" . 'добавлена' . PHP_EOL, Console::FG_GREEN);
@@ -139,7 +140,7 @@ class RbacUserManagerController extends Controller
 
         foreach(Yii::$app->authManager->getRules() as $item){
             $this->stdout("\t" . $item->name, Console::BOLD);
-            $this->stdout("\t" . $item::className(), Console::FG_GREEN);
+            $this->stdout("\t" . $item::class, Console::FG_GREEN);
             $item->description ? $this->stdout("\t" . $item->description . PHP_EOL, Console::FG_YELLOW) : $this->stdout("\t" . 'не задано' . PHP_EOL, Console::FG_GREY);
         }
 
@@ -185,7 +186,7 @@ class RbacUserManagerController extends Controller
                 }
             }else{
                 $this->printErrors($model);
-                $error = TRUE;
+                $error = true;
             }
         }
 
@@ -219,7 +220,7 @@ class RbacUserManagerController extends Controller
                     $this->stdout(' ' . $statusName . PHP_EOL, Console::BOLD);
                 }else{
                     $this->printErrors($this->user);
-                    $error = TRUE;
+                    $error = true;
                 }
             }
         }
@@ -245,7 +246,7 @@ class RbacUserManagerController extends Controller
     {
         $error = $this->findRole($this->findUser($this->checkTransferOptions(['user', 'role', ])));
 
-        if(!$error AND !is_object($A = Yii::$app->authManager->getAssignment($this->role->name, $this->user->id))){
+        if(!$error && !is_object($A = Yii::$app->authManager->getAssignment($this->role->name, $this->user->id))){
             Yii::$app->authManager->assign($this->role, $this->user->id);
 
             $this->stdout('Пользователю ', Console::BOLD);
@@ -261,7 +262,7 @@ class RbacUserManagerController extends Controller
     {
         $error = $this->findRole($this->findUser($this->checkTransferOptions(['user', 'role', ])));
 
-        if(!$error AND is_object(Yii::$app->authManager->getAssignment($this->role->name, $this->user->id))){
+        if(!$error && is_object(Yii::$app->authManager->getAssignment($this->role->name, $this->user->id))){
             Yii::$app->authManager->revoke($this->role, $this->user->id);
 
             $this->stdout('У пользователя ', Console::BOLD);
@@ -275,9 +276,9 @@ class RbacUserManagerController extends Controller
     
     protected function findRole($error)
     {
-        if(!$error AND !is_object($role = Yii::$app->authManager->getRole($this->role))){
+        if(!$error && !is_object($role = Yii::$app->authManager->getRole($this->role))){
             $this->roleNotFound($this->role);
-            $error = TRUE;
+            $error = true;
         }elseif(!$error){
             $this->role = $role;
         }
@@ -287,9 +288,9 @@ class RbacUserManagerController extends Controller
 
     protected function findUser($error)
     {
-        if(!$error AND !is_object($user = User::findOne(['username' => $this->user, ]))){
+        if(!$error && !is_object($user = User::findOne(['username' => $this->user, ]))){
             $this->userNotFound($this->user);
-            $error = TRUE;
+            $error = true;
         }elseif(!$error){
             $this->user = $user;
         }

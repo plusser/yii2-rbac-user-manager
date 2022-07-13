@@ -26,17 +26,17 @@ $this->title = 'Разрешение ' . ($this->params['breadcrumbs'][] = $mode
     <?php echo DetailView::widget([
         'model' => $model,
         'attributes' => [
-			'name',
+            'name',
             'ruleName',
-			'description',
-			[
-				'attribute' => 'createdAt',
-				'value' => date('Y-m-d H:i:s', $model->createdAt),
-			],
-			[
-				'attribute' => 'updatedAt',
-				'value' => date('Y-m-d H:i:s', $model->updatedAt),
-			],
+            'description',
+            [
+                'attribute' => 'createdAt',
+                'value' => date('d-m-Y H:i:s', $model->createdAt),
+            ],
+            [
+                'attribute' => 'updatedAt',
+                'value' => date('d-m-Y H:i:s', $model->updatedAt),
+            ],
         ],
     ]); ?>
 

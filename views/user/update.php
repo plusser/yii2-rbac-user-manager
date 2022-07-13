@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\bootstrap\Collapse;
+use yii\bootstrap4\Accordion;
 
 $this->title = 'Редактировать пользователя ' . $model->username;
 $this->params['breadcrumbs'][] = ['label' => 'Пользователи', 'url' => ['index']];
@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = 'Редактировать';
 			]);
 		} ?>
 
-        <?php if(Yii::$app->user->can('userRoleUpdate')){echo Collapse::widget([
+        <?php if(Yii::$app->user->can('userRoleUpdate')){echo Accordion::widget([
 			'items' => [
 				[
 					'label' => 'Роли',

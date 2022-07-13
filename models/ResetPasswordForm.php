@@ -3,7 +3,7 @@
 namespace rbacUserManager\models;
 
 use yii\base\Model;
-use yii\base\InvalidParamException;
+use yii\base\InvalidArgumentException;
 
 class ResetPasswordForm extends Model
 {
@@ -14,11 +14,11 @@ class ResetPasswordForm extends Model
     public function __construct($token, $config = [])
     {
         if(empty($token) OR !is_string($token)){
-            throw new InvalidParamException('Токен восстановления пароля не может быть пустым.');
+            throw new InvalidArgumentException('Токен восстановления пароля не может быть пустым.');
         }
 
         if(!is_object($this->_user = User::findByPasswordResetToken($token))){
-            throw new InvalidParamException('Неверный токен восстановления пароля.');
+            throw new InvalidArgumentException('Неверный токен восстановления пароля.');
         }
 
         parent::__construct($config);

@@ -3,89 +3,55 @@
 namespace rbacUserManager\controllers;
 
 use Yii;
-use yii\data\ActiveDataProvider;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\AccessControl;
-use yii\filters\VerbFilter;
+use crud\controllers\CRUDController;
 use rbacUserManager\models\User;
-use rbacUserManager\components\ActionIndexTrait;
-use rbacUserManager\components\ActionViewTrait;
-use rbacUserManager\components\ActionDeleteTrait;
-use rbacUserManager\components\ActionCreateUpdateSaveMethodTrait;
+use rbacUserManager\models\UserSearch;
 
-class UserController extends Controller
+class UserController extends CRUDController
 {
 
-    use ActionIndexTrait;
-    use ActionViewTrait;
-    use ActionDeleteTrait;
-    use ActionCreateUpdateSaveMethodTrait;
-
-	public function behaviors()
+    public function actions()
     {
-        return [
-			'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'update', 'delete', ],
-                'rules' => [
-                    [
-                        'actions' => ['index', ],
-                        'allow' => true,
-                        'roles' => ['userIndex', ],
-                    ],
-                    [
-                        'actions' => ['view', ],
-                        'allow' => true,
-						'matchCallback' => function($rule, $action){
-							return Yii::$app->user->can('userView') OR Yii::$app->user->can('userProfileOwner', ['userId' => Yii::$app->request->getQueryParam('id'), ]);
-						},
-                    ],
-                    [
-                        'actions' => ['update', ],
-                        'allow' => true,
-						'matchCallback' => function($rule, $action){
-							return Yii::$app->user->can('userUpdate') OR Yii::$app->user->can('userProfileOwner', ['userId' => Yii::$app->request->getQueryParam('id'), ]);
-						},
-                    ],
-                    [
-                        'actions' => ['delete', ],
-                        'allow' => true,
-                        'roles' => ['userDelete', ],
-                    ],
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['post', ],
-                ],
-            ],
-        ];
+        $result = parent::actions();
+
+        unset($result['create']);
+
+        return $result;
     }
 
-    protected function getDataProvider()
+    public function behaviors()
     {
-        return new ActiveDataProvider([
-            'query' => User::find(),
-            'pagination' => [
-                'pageSize' => $this->module->paginationPageSize,
-            ],
-        ]);
+        $result = parent::behaviors();
+
+        $result['access']['only'] = ['index', 'view', 'update', 'delete', ];
+        unset($result['access']['rules']['create']);
+
+        unset($result['access']['rules']['view']['roles']);
+        $result['access']['rules']['view']['matchCallback'] = function($rule, $action){
+            return Yii::$app->user->can('userView') || Yii::$app->user->can('userProfileOwner', ['userId' => Yii::$app->request->getQueryParam('id'), ]);
+        };
+
+        unset($result['access']['rules']['update']['roles']);
+        $result['access']['rules']['update']['matchCallback'] = function($rule, $action){
+            return Yii::$app->user->can('userUpdate') || Yii::$app->user->can('userProfileOwner', ['userId' => Yii::$app->request->getQueryParam('id'), ]);
+        };
+
+        return $result;
     }
 
-    public function actionUpdate($id)
+    public function getModelClass()
     {
-		return $this->save($this->findModel($id), 'update');
+        return User::class;
     }
 
-    protected function findModel($id)
+    public function getModelSearch()
     {
-        if(is_null($model = User::findOne($id))){
-			throw new NotFoundHttpException('Пользователь с ID ' . $id . ' не существует.');
-        }
+        return new UserSearch;
+    }
 
-		return $model;
+    public function getPermissionPrefix()
+    {
+        return 'user';
     }
 
 }

@@ -3,7 +3,7 @@
 namespace rbacUserManager\controllers;
 
 use Yii;
-use yii\base\InvalidParamException;
+use yii\base\InvalidArgumentException;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\AccessControl;
@@ -20,7 +20,7 @@ class AuthController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'only' => ['logout', 'signup', ],
                 'rules' => [
                     [
@@ -36,7 +36,7 @@ class AuthController extends Controller
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'logout' => ['post', ],
                 ],
@@ -48,7 +48,7 @@ class AuthController extends Controller
     {
         if(!Yii::$app->user->isGuest){
             return $this->goHome();
-        }elseif(is_object($model = new LoginForm()) AND $model->load(Yii::$app->request->post()) AND $model->login()){
+        }elseif(is_object($model = new LoginForm()) && $model->load(Yii::$app->request->post()) AND $model->login()){
             return $this->goBack();
         }else{
             return $this->render('login', [
@@ -66,7 +66,7 @@ class AuthController extends Controller
 
     public function actionSignup()
     {
-        if(is_object($model = new SignupForm()) AND $model->load(Yii::$app->request->post())){
+        if(is_object($model = new SignupForm()) && $model->load(Yii::$app->request->post())){
             if($user = $model->signup()){
                 return $this->redirect(['user/update', 'id' => $user->id, ]);
             }
@@ -79,7 +79,7 @@ class AuthController extends Controller
 
     public function actionRequestPasswordReset()
     {
-        if(is_object($model = new PasswordResetRequestForm()) AND $model->load(Yii::$app->request->post()) AND $model->validate()){
+        if(is_object($model = new PasswordResetRequestForm()) && $model->load(Yii::$app->request->post()) && $model->validate()){
             if($model->sendEmail()){
                 Yii::$app->session->setFlash('success', 'Проверьте свою электронную почту и следуйте инструкциям в письме.');
                 return $this->goHome();
@@ -97,11 +97,11 @@ class AuthController extends Controller
     {
         try{
             $model = new ResetPasswordForm($token);
-        }catch(InvalidParamException $e){
+        }catch(InvalidArgumentException $e){
             throw new BadRequestHttpException($e->getMessage());
         }
 
-        if($model->load(Yii::$app->request->post()) AND $model->validate() AND $model->resetPassword()){
+        if($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()){
             Yii::$app->session->setFlash('success', 'Новый пароль сохранен.');
 
             return $this->goHome();

@@ -2,8 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\bootstrap\Collapse;
-use yii\bootstrap\Tabs;
+use yii\bootstrap4\Accordion;
+use yii\bootstrap4\Tabs;
 
 ?>
 
@@ -17,7 +17,7 @@ use yii\bootstrap\Tabs;
 
 		<?php echo $form->field($model, 'description')->textArea(); ?>
 
-		<?php echo Collapse::widget([
+		<?php echo Accordion::widget([
 			'items' => [
 				[
 					'label' => 'Включает в себя',

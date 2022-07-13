@@ -61,7 +61,7 @@ class User extends commonUser
 
     public function getRoleList()
     {
-        return (empty($this->_roleList) AND !$this->hasErrors()) ? Yii::$app->authManager->getAssignments($this->id) : $this->_roleList;
+        return (empty($this->_roleList) && !$this->hasErrors()) ? Yii::$app->authManager->getAssignments($this->id) : $this->_roleList;
     }
 
     public function setRoleList($roleList)
@@ -69,7 +69,7 @@ class User extends commonUser
 		if(!empty($roleList)){
 			$this->_roleList = [];
 			foreach((array) $roleList as $itemName){
-				if(is_object($item = Yii::$app->authManager->getAssignment($itemName, $this->id)) OR is_object($item = new Assignment)){
+				if(is_object($item = Yii::$app->authManager->getAssignment($itemName, $this->id)) || is_object($item = new Assignment)){
                     $item->userId = $this->id;
                     $item->roleName = $itemName;
 					$this->_roleList[$itemName] = $item;
@@ -84,7 +84,7 @@ class User extends commonUser
 	{
 		parent::afterSave($insert, $changedAttributes);
 
-		if(!$this->hasErrors() AND ((Yii::$app instanceof yii\console\Application) OR Yii::$app->user->can('userRoleUpdate'))){
+		if(!$this->hasErrors() && ((Yii::$app instanceof yii\console\Application) || Yii::$app->user->can('userRoleUpdate'))){
 
             Yii::$app->authManager->revokeAll($this->id);
 

@@ -4,8 +4,8 @@ namespace rbacUserManager\widgets;
 
 use Yii;
 use yii\helpers\Html;
-use yii\bootstrap\Nav;
-use yii\bootstrap\Widget;
+use yii\bootstrap4\Nav;
+use yii\bootstrap4\Widget;
 
 class MenuItems extends Widget
 {
@@ -38,10 +38,9 @@ class MenuItems extends Widget
         }
 
         return empty($menuItems) ? NULL :Nav::widget([
-            'options' => ['class' => 'navbar-nav navbar-left'],
+            'options' => ['class' => 'navbar-nav'],
             'items' => [[
                 'label' => 'Управление доступом',
-                'dropDownOptions' => ['style' => 'background: #000;', ],
                 'items' => $menuItems,
             ], ],
         ]);

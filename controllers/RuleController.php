@@ -2,40 +2,40 @@
 
 namespace rbacUserManager\controllers;
 
-use Yii;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
-use rbacUserManager\components\ActionIndexTrait;
-use rbacUserManager\components\PermissionRoleProviderTrait;
+use crud\actions\IndexAction;
+use rbacUserManager\models\RuleSearch;
+
 
 class RuleController extends Controller
 {
 
-    use ActionIndexTrait;
-    use PermissionRoleProviderTrait;
-
-	public function behaviors()
+    public function behaviors()
     {
         return [
-			'access' => [
-                'class' => AccessControl::className(),
+            'access' => [
+                'class' => AccessControl::class,
                 'only' => ['index', ],
                 'rules' => [
-                    [
+                    'index' => [
                         'actions' => ['index', ],
                         'allow' => true,
                         'roles' => ['ruleIndex', ],
                     ],
                 ],
             ],
-            
         ];
     }
 
-    protected function getDataList()
+    public function actions()
     {
-		return Yii::$app->authManager->getRules();
+        return [
+            'index' => [
+                'class' => IndexAction::class,
+                'searchModel' => new RuleSearch,
+            ],
+        ];
     }
 
 }

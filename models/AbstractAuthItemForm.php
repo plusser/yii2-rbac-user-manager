@@ -5,16 +5,23 @@ namespace rbacUserManager\models;
 use Yii;
 use yii\base\Model;
 
-class PermissionRoleForm extends Model
+abstract class AbstractAuthItemForm extends Model
 {
 
     protected $model;
     protected $originalName;
     protected $_children = [];
 
-    public function __construct($model, $config = [])
+    abstract public static function authItemTypeName(): string;
+
+    public static function findOne($id)
     {
-        $this->model = $model;
+        return is_object($model = Yii::$app->authManager->{'get' . ucfirst(static::authItemTypeName())}($id)) ? new static($model) : null;
+    }
+
+    public function __construct($model = null, $config = [])
+    {
+        $this->model = $model ?? Yii::$app->authManager->{'create' . ucfirst(static::authItemTypeName())}(null);
         $this->originalName = $this->model->name;
 
         parent::__construct($config);
@@ -23,7 +30,7 @@ class PermissionRoleForm extends Model
     public function rules()
     {
         return [
-            [['name', 'ruleName', ], 'trim'],
+            [['name', 'ruleName', 'description', ], 'trim'],
             ['name', 'required'],
             [['name', 'ruleName', ], 'string', 'min' => 2, 'max' => 255, ],
             [['description', 'children', ], 'safe'],
@@ -42,14 +49,14 @@ class PermissionRoleForm extends Model
         ];
     }
 
-    public function getModelClass()
+    public function getModelClass(): string
     {
         return get_class($this->model);
     }
 
     public function getChildren()
     {
-        return (empty($this->_children) AND !$this->hasErrors()) ? Yii::$app->authManager->getChildren($this->model->name) : $this->_children;
+        return (empty($this->_children) && !$this->hasErrors()) ? Yii::$app->authManager->getChildren($this->model->name) : $this->_children;
     }
 
     public function setChildren($children)
@@ -64,6 +71,11 @@ class PermissionRoleForm extends Model
         }
 
         return $this;
+    }
+
+    public function getId()
+    {
+        return $this->getName();
     }
 
     public function getName()
@@ -109,9 +121,23 @@ class PermissionRoleForm extends Model
         return $this->model->createdAt;
     }
 
+    public function setCreatedAt($createdAt)
+    {
+        $this->model->createdAt = $createdAt;
+
+        return $this;
+    }
+
     public function getUpdatedAt()
     {
         return $this->model->updatedAt;
+    }
+
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->model->updatedAt = $updatedAt;
+
+        return $this;
     }
 
     public function getIsNewRecord()
@@ -123,14 +149,14 @@ class PermissionRoleForm extends Model
     {
         $result = true;
 
-        if($this->isNewRecord OR $this->name != $this->originalName){
-            if(is_object(Yii::$app->authManager->getPermission($this->name)) OR is_object(Yii::$app->authManager->getRole($this->name))){
+        if($this->isNewRecord || $this->name != $this->originalName){
+            if(is_object(Yii::$app->authManager->getPermission($this->name)) || is_object(Yii::$app->authManager->getRole($this->name))){
                 $this->addError('name', 'Разрешение или роль с таким названием уже существует.');
                 $result = false;
             }
         }
 
-        return parent::validate($attributeNames, false) AND $result;
+        return parent::validate($attributeNames, false) && $result;
     }
 
     public function save()
@@ -153,4 +179,5 @@ class PermissionRoleForm extends Model
     {
         return Yii::$app->authManager->remove($this->model);
     }
+
 }
