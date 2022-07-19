@@ -8,54 +8,31 @@ use yii\console\ExitCode;
 trait ConsoleCommandTrait
 {
 
-	protected function exitCode($error = FALSE)
-	{
-		return $error ? ExitCode::UNSPECIFIED_ERROR : ExitCode::OK;
-	}
+    protected function exitCode($error = false)
+    {
+        return $error ? ExitCode::UNSPECIFIED_ERROR : ExitCode::OK;
+    }
 
-	protected function checkTransferOptions($options)
-	{
-		$error = FALSE;
+    protected function checkTransferOptions($options)
+    {
+        $error = false;
 
-		foreach($options as $item){
-			if(empty($this->{$item})){
-				$this->notSpecifiedOption($item);
-				$error = TRUE;
-			}
-		}
+        foreach($options as $item){
+            if(empty($this->{$item})){
+                $this->notSpecifiedOption($item);
+                $error = true;
+            }
+        }
 
-		return $error;
-	}
+        return $error;
+    }
 
-	protected function notSpecifiedOption($option)
-	{
-		$this->stdout('Не определена опция ', Console::BOLD);
-		$this->stdout('--' . $option . (($key = array_search($option, $this->optionAliases())) ? ' (-' . $key . ')' : '') . PHP_EOL, Console::FG_RED);
-	}
+    protected function notSpecifiedOption($option)
+    {
+        $this->stdout('Не определена опция ', Console::BOLD);
+        $this->stdout('--' . $option . (($key = array_search($option, $this->optionAliases())) ? ' (-' . $key . ')' : '') . PHP_EOL, Console::FG_RED);
+    }
 
-	protected function roleNotFound($role)
-	{
-		$this->stdout('Роль ', Console::BOLD);
-		$this->stdout($role, Console::FG_RED);
-		$this->stdout(' не существует' . PHP_EOL, Console::BOLD);
-	}
-
-	protected function userNotFound($user)
-	{
-		$this->stdout('Пользователь ', Console::BOLD);
-		$this->stdout($user, Console::FG_RED);
-		$this->stdout(' не существует' . PHP_EOL, Console::BOLD);
-	}
-
-	protected function printErrors($model)
-	{
-		$this->stdout(PHP_EOL);
-
-		foreach($model->errors as $fieldErrors){
-			foreach($fieldErrors as $item){
-				$this->stdout($item . PHP_EOL, Console::FG_RED);
-			}
-		}
-	}
+    abstract public function optionAliases();
 
 }

@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 use yii\helpers\Html;
 
@@ -10,7 +10,7 @@ $F = function($item, $userRoleList){
 
 <ul style="list-style-type: decimal; margin: 20px 0px;">
 <?php foreach($itemList as $item){ ?>
-    <li><?php echo Html::checkbox('User[roleList][' . $item->name . ']', isset($userRoleList[$item->name]), ['value' => $item->name, 'id' => $id = 'User_roleList_' . $item->name, ]); ?>&nbsp;&nbsp;<?php echo Html::label($F($item, $userRoleList), $id); ?>
+    <li><?php echo Html::checkbox('User[roleList][' . $item->name . ']', isset($userRoleList[$item->name]), ['value' => $item->name, 'id' => $id = 'User_roleList_' . $item->name]); ?>&nbsp;&nbsp;<?php echo Html::label($F($item, $userRoleList), $id); ?>
     </li>
 <?php } ?>
 </ul>

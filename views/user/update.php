@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -15,42 +15,43 @@ $this->params['breadcrumbs'][] = 'Редактировать';
 
     <h1><?php echo Html::encode($this->title); ?></h1>
 
-	<div class="user-form">
+    <div class="user-form">
 
-		<?php $form = ActiveForm::begin(); ?>
+        <?php $form = ActiveForm::begin(); ?>
 
-		<?php echo $form->field($model, 'username')->textInput(['autofocus' => true]); ?>
+        <?php echo $form->field($model, 'username')->textInput(['autofocus' => true]); ?>
 
-		<?php echo $form->field($model, 'email'); ?>
+        <?php echo $form->field($model, 'email'); ?>
 
-		<?php echo $form->field($model, 'status')->dropDownList([
-			$model::STATUS_ACTIVE => 'Да',
-			$model::STATUS_DELETED => 'Нет',
-		]); ?>
+        <?php echo $form->field($model, 'status')->dropDownList([
+            $model::STATUS_ACTIVE   => 'Да',
+            $model::STATUS_DELETED  => 'Нет',
+        ]); ?>
 
-		<?php if($userAdditionalForm = Yii::$app->controller->module->userAdditionalForm){
-			echo $userAdditionalForm::widget([
-				'form' => $form,
-				'model' => $model,
-			]);
-		} ?>
+        <?php if($userAdditionalForm = Yii::$app->controller->module->userAdditionalForm){
+            echo $userAdditionalForm::widget([
+                'form' => $form,
+                'model' => $model,
+            ]);
+        } ?>
 
         <?php if(Yii::$app->user->can('userRoleUpdate')){echo Accordion::widget([
-			'items' => [
-				[
-					'label' => 'Роли',
-					'content' => $this->render('_roleListForm', ['userRoleList' => $model->roleList, 'itemList' => Yii::$app->authManager->getRoles(), ]),
-					'contentOptions' => ['class' => 'out',]
-				],
-			],
-		]);} ?>
+            'options'   => ['class' => 'form-group'],
+            'items'     => [
+                [
+                    'label'             => 'Роли',
+                    'content'           => $this->render('_roleListForm', ['userRoleList' => $model->roleList, 'itemList' => Yii::$app->authManager->getRoles()]),
+                    'contentOptions'    => ['class' => 'out']
+                ],
+            ],
+        ]);} ?>
 
-		<div class="form-group">
-			<?php echo Html::submitButton('Сохранить', ['class' => 'btn btn-success', ]); ?>
-		</div>
+        <div class="form-group">
+            <?php echo Html::submitButton('Сохранить', ['class' => 'btn btn-success']); ?>
+        </div>
 
-		<?php ActiveForm::end(); ?>
+        <?php ActiveForm::end(); ?>
 
-	</div>
+    </div>
 
 </div>

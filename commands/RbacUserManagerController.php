@@ -6,8 +6,7 @@ use Yii;
 use yii\console\Controller;
 use yii\helpers\Console;
 use rbacUserManager\components\ConsoleCommandTrait;
-use rbacUserManager\models\PermissionForm;
-use rbacUserManager\models\RoleForm;
+use rbacUserManager\components\MigrationTrait;
 use rbacUserManager\models\SignupForm;
 use rbacUserManager\models\User;
 
@@ -15,6 +14,7 @@ class RbacUserManagerController extends Controller
 {
 
     use ConsoleCommandTrait;
+    use MigrationTrait;
 
     public $user;
     public $email;
@@ -48,63 +48,9 @@ class RbacUserManagerController extends Controller
     {
         $initItems = require(__DIR__ . '/initItems.php');
 
-        $this->stdout(PHP_EOL . PHP_EOL . 'Правила:' . PHP_EOL . PHP_EOL, Console::BOLD);
-
-        foreach($initItems['rules'] as $item){
-            $newRuleModel = new $item;
-
-            $this->stdout("\t" . $newRuleModel->name, Console::BOLD);
-
-            if(!is_object($ruleModel = Yii::$app->authManager->getRule($newRuleModel->name)) || $this->force){
-                if(!is_object($ruleModel)){
-                    Yii::$app->authManager->add($newRuleModel);
-                    $this->stdout("\t" . 'добавлено' . PHP_EOL, Console::FG_GREEN);
-                }else{
-                    Yii::$app->authManager->update($newRuleModel->name, $newRuleModel);
-                    $this->stdout("\t" . 'обновлено' . PHP_EOL, Console::FG_YELLOW);
-                }
-            }else{
-                $this->stdout("\t" . 'пропущено (уже имеется правило с таким именем)' . PHP_EOL, Console::FG_RED);
-            }
-        }
-
-        $this->stdout(PHP_EOL . PHP_EOL);
-
-        $this->stdout('Разрешения:' . PHP_EOL . PHP_EOL, Console::BOLD);
-
-        foreach($initItems['permissions'] as $item){
-            $this->stdout("\t" . $item['name'], Console::BOLD);
-
-            if(!is_object($permissionModel = Yii::$app->authManager->getPermission($item['name'])) || $this->force){
-                $model = new PermissionForm($permissionModel ? $permissionModel : Yii::$app->authManager->createPermission(null));
-                $model->setAttributes($item);
-                if($model->save()){
-                    is_object($permissionModel) ? $this->stdout("\t" . 'обновлено' . PHP_EOL, Console::FG_YELLOW) : $this->stdout("\t" . 'добавлено' . PHP_EOL, Console::FG_GREEN);
-                }
-            }else{
-                $this->stdout("\t" . 'пропущено (уже имеется разрешение с таким именем)' . PHP_EOL, Console::FG_RED);
-            }
-        }
-
-        $this->stdout(PHP_EOL . PHP_EOL);
-
-        $this->stdout('Роли:' . PHP_EOL . PHP_EOL, Console::BOLD);
-
-        foreach($initItems['roles'] as $item){
-            $this->stdout("\t" . $item['name'], Console::BOLD);
-
-            if(!is_object($roleModel = Yii::$app->authManager->getRole($item['name'])) || $this->force){
-                $model = new RoleForm($roleModel ? $roleModel : Yii::$app->authManager->createRole(null));
-                $model->setAttributes($item);
-                if($model->save()){
-                    is_object($roleModel) ? $this->stdout("\t" . 'обновлена' . PHP_EOL, Console::FG_YELLOW) : $this->stdout("\t" . 'добавлена' . PHP_EOL, Console::FG_GREEN);
-                }
-            }else{
-                $this->stdout("\t" . 'пропущено (уже имеется роль с таким именем)' . PHP_EOL, Console::FG_RED);
-            }
-        }
-
-        $this->stdout(PHP_EOL . PHP_EOL);
+        $this->addRules($initItems['rules']);
+        $this->addPermissions($initItems['permissions']);
+        $this->addRoles($initItems['roles']);
 
         return $this->exitCode();
     }
@@ -171,9 +117,9 @@ class RbacUserManagerController extends Controller
         if(!$error){
             $model = new SignupForm();
             $model->setAttributes([
-                'username' => $this->user,
-                'email' => $this->email,
-                'password' => $this->password,
+                'username'  => $this->user,
+                'email'     => $this->email,
+                'password'  => $this->password,
             ]);
 
             if(is_object($model->signup())){
@@ -296,6 +242,20 @@ class RbacUserManagerController extends Controller
         }
 
         return $error;
+    }
+
+    protected function roleNotFound($role)
+    {
+        $this->stdout('Роль ', Console::BOLD);
+        $this->stdout($role, Console::FG_RED);
+        $this->stdout(' не существует' . PHP_EOL, Console::BOLD);
+    }
+
+    protected function userNotFound($user)
+    {
+        $this->stdout('Пользователь ', Console::BOLD);
+        $this->stdout($user, Console::FG_RED);
+        $this->stdout(' не существует' . PHP_EOL, Console::BOLD);
     }
 
 }

@@ -1,9 +1,9 @@
-<?php 
+<?php
 
 use yii\helpers\Html;
 
 $F = function($item){
-    return is_object($permission = Yii::$app->authManager->getPermission($item->name)) ? Html::a($permission->name . ' (' . (empty($permission->description) ? '...' : $permission->description) . ')' . date(' [d-m-Y H:i:s]', (int) $item->createdAt), ['permission/view', 'id' => $permission->name], ['target' => '_blank', ]) : '';
+    return is_object($permission = Yii::$app->authManager->getPermission($item->name)) ? Html::a($permission->name . ' (' . (empty($permission->description) ? '...' : $permission->description) . ')' . date(' [d-m-Y H:i:s]', (int) $item->createdAt), ['permission/view', 'id' => $permission->name], ['target' => '_blank']) : '';
 };
 
 ?>
